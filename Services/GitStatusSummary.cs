@@ -4,6 +4,7 @@ using git_directory_repos.Interfaces;
 using git_stats.Models;
 using git_stats.Models;
 using LibGit2Sharp;
+using System.Linq;
 
 namespace git_directory_repos.Services
 {
@@ -26,8 +27,11 @@ namespace git_directory_repos.Services
                     {
                         vm.GitRepos.Add(new GitStatusItem(){
                             FolderName = Path.GetFileName(directory),
-                            BranchName = repo.Head.FriendlyName
-                        });                        
+                            BranchName = repo.Head.FriendlyName,
+                            StashCount = repo.Stashes.Count(),
+                            LastUpdated = repo.Head.Commits.LastOrDefault().Committer.When.DateTime
+                        });
+                        
                     }
                 }
                 catch(Exception err)
